@@ -2,70 +2,70 @@
 #include <vector>
 using namespace std;
 
-/*
+
 class Music{
 public:
 	virtual void song() = 0;
 };
-*/
 
-class MusicFactory{
-public:
-	//Factory method
-	static MusicFactory *make_Music(int type);
-	virtual void song() = 0;
 
-};
 
-class Rock : public MusicFactory{
+class Rock : public Music{
 public:
 	virtual void song(){
 		cout << "!! ROCK IT HARD !!" << endl;
 	}
 };
 
-class Country : public MusicFactory{
+class Country : public Music{
 public:
 	virtual void song(){
 		cout << "!! COUNTRY ROAD TAKE ME HOME !!" << endl;
 	}
 };
 
+class MusicFactory{
+public:
+	//Factory Method
+	Music* make_Music(char type){
+		Music *music = NULL;
 
+		switch (type)
+		{
+		case 'R':
+			music = new Rock();
+			break;
+		case 'C':
+			music = new Country();
+			break;
+		default:
+			break;
+		}
+		return music;
+
+	}
+
+};
 
 
 int main()
 {
-	vector <MusicFactory*> vMusic;
-	int type;
+	MusicFactory *musicFactory = new MusicFactory();
 
-	while (1)
+	cout << "!!WHAT TYPE OF MUSIC YOU WANT :- [R] for ROCK and [C] for COUNTRY!!" << endl;
+
+	char type;
+	cin >> type;
+
+	Music *music = musicFactory->make_Music(type);
+
+	cout << "Music: ";
+	if (music)
 	{
-		cout << "Enter (1 for ROCK) (2 for COUNTRY)(0 to Exit) ";
-		cin >> type;
-			if (type == 0)
-				break;
-			vMusic.push_back(MusicFactory::make_Music(type));
-			
-    }
-		
-	for (int i = 0; i < vMusic.size(); ++i){
-		vMusic[i]->song();
+		music->song();
 	}
-	
-
-	
+	else
+		cout << "Wrong Selection" << endl;
 	system("pause");
 }
 
-
-MusicFactory *MusicFactory::make_Music(int type){
-		 if (type == 1)
-		{
-			return new Rock;
-		}
-		else if (type == 2)
-		{
-			return new Country;
-		}
-}
